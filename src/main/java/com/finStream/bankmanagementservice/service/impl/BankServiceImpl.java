@@ -1,8 +1,8 @@
 package com.finStream.bankmanagementservice.service.impl;
 
+import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
-import com.finStream.bankmanagementservice.dto.BankRequest;
-import com.finStream.bankmanagementservice.entity.Bank;
+import com.finStream.bankmanagementservice.entity.BankEntity;
 import com.finStream.bankmanagementservice.enums.Status;
 import com.finStream.bankmanagementservice.exception.BankNameConflictException;
 import com.finStream.bankmanagementservice.exception.BankNotFoundException;
@@ -13,10 +13,8 @@ import com.finStream.bankmanagementservice.service.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,7 +41,7 @@ public class BankServiceImpl implements IBankService {
      * @return The newly created bank as a BankDto object.
      */
     @Override
-    public BankDto createBank(BankRequest bankRequest) {
+    public Bank createBank(BankDto bankRequest) {
         if(bankNameExists(bankRequest.getName())){
             throw new BankNameConflictException(bankRequest.getName() + ": bank Name already exists");
         }
@@ -51,11 +49,11 @@ public class BankServiceImpl implements IBankService {
             throw new BankShortNameConflictException(bankRequest.getShortName() + " : bank short Name already exists");
         }
 
-        Bank bank = BankMapper.INSTANCE.mapBankRequestToBank(bankRequest);
-        bank.setVerified(false);
+        BankEntity bank = BankMapper.INSTANCE.mapBankRequestToBank(bankRequest);
+        bank.setVerified(true);
         bank.setStatus(Status.PENDING_APPROVAL);
         bank.setCreatedDate(LocalDateTime.now());
-        Bank savedBank = bankRepository.save(bank);
+        BankEntity savedBank = bankRepository.save(bank);
         return bankMapper.mapBankToBankDto(savedBank);
     }
 
@@ -69,23 +67,23 @@ public class BankServiceImpl implements IBankService {
      */
     // Helper methods: getBankOrThrow, validateBankName, validateBankShortName
     @Override
-    public BankDto updateBank(BankDto bankDto) {
-        Bank existingBank = getBankOrThrow(bankDto.getId());
+    public Bank updateBank(Bank bankDto) {
+        BankEntity existingBank = getBankOrThrow(bankDto.getId());
         validateBankName(bankDto, existingBank);
         validateBankShortName(bankDto, existingBank);
 
-        Bank updatedBank = bankMapper.mapBankDtoToBank(bankDto);
-        Bank savedBank = bankRepository.save(updatedBank);
+        BankEntity updatedBank = bankMapper.mapBankDtoToBank(bankDto);
+        BankEntity savedBank = bankRepository.save(updatedBank);
 
         return bankMapper.mapBankToBankDto(savedBank);
     }
 
-    private Bank getBankOrThrow(UUID bankId) {
+    private BankEntity getBankOrThrow(UUID bankId) {
         return bankRepository.findById(bankId)
                 .orElseThrow(() -> new BankNotFoundException("Bank not found with id: " + bankId));
     }
 
-    private void validateBankName(BankDto bankDto, Bank existingBank) {
+    private void validateBankName(Bank bankDto, BankEntity existingBank) {
         bankRepository.findByName(bankDto.getName())
                 .ifPresent(bank -> {
                     if (!bank.getId().equals(existingBank.getId())) {
@@ -94,7 +92,7 @@ public class BankServiceImpl implements IBankService {
                 });
     }
 
-    private void validateBankShortName(BankDto bankDto, Bank existingBank) {
+    private void validateBankShortName(Bank bankDto, BankEntity existingBank) {
         bankRepository.findByShortName(bankDto.getShortName())
                 .ifPresent(bank -> {
                     if (!bank.getId().equals(existingBank.getId())) {
@@ -111,8 +109,8 @@ public class BankServiceImpl implements IBankService {
      * @return The bank details, mapped to a BankDto.
      */
     @Override
-    public BankDto getBank(UUID bankId) {
-        Bank bank = bankRepository.findById(bankId)
+    public Bank getBank(UUID bankId) {
+        BankEntity bank = bankRepository.findById(bankId)
                 .orElseThrow(() -> new BankNotFoundException("Bank not found with id: " + bankId));
         return bankMapper.mapBankToBankDto(bank);
     }
@@ -142,7 +140,7 @@ public class BankServiceImpl implements IBankService {
      * @return A list of all active banks, each mapped to a BankDto.
      */
     @Override
-    public List<BankDto> findAllBanks() {
+    public List<Bank> findAllBanks() {
         return bankRepository.findAll()
                 .stream()
                 .filter(this::isNotDeleted)
@@ -157,7 +155,7 @@ public class BankServiceImpl implements IBankService {
      * @param bank The bank entity to check.
      * @return True if the bank is not deleted, false otherwise.
      */
-    private boolean isNotDeleted(Bank bank){
+    private boolean isNotDeleted(BankEntity bank){
         return !bank.isDeleted();
     }
 

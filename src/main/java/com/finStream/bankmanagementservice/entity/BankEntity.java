@@ -2,11 +2,10 @@ package com.finStream.bankmanagementservice.entity;
 
 
 import com.finStream.bankmanagementservice.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.UUID;
 
 /**
  * The Bank class represents a financial institution within the application.
@@ -34,7 +33,10 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class Bank extends BaseEntity {
+public class BankEntity extends BaseEntity {
+
+    @Id
+    private UUID id;
 
     private String name;
     private String shortName;

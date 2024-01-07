@@ -1,7 +1,13 @@
 package com.finStream.bankmanagementservice.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 /**
  * The Address class represents a physical address with details such as street, city, zip code,
@@ -25,6 +31,14 @@ import lombok.*;
 @Builder
 public class Address extends BaseEntity{
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
     private String street;
     private String city;
     private String zip;

@@ -1,7 +1,7 @@
 package com.finStream.bankmanagementservice.controller;
 
+import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
-import com.finStream.bankmanagementservice.dto.BankRequest;
 import com.finStream.bankmanagementservice.service.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class BankController {
      * @return A ResponseEntity containing the created BankDto with status CREATED.
      */
     @PostMapping
-    public ResponseEntity<BankDto> createBank(@RequestBody BankRequest bankRequest){
+    public ResponseEntity<Bank> createBank(@RequestBody BankDto bankRequest){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(bankService.createBank(bankRequest));
     }
@@ -44,7 +44,7 @@ public class BankController {
      * @return A ResponseEntity containing the requested BankDto with status OK.
      */
     @GetMapping("/{bankId}")
-    public ResponseEntity<BankDto> findBankById(@PathVariable UUID bankId){
+    public ResponseEntity<Bank> findBankById(@PathVariable UUID bankId){
         return ResponseEntity.ok(bankService.getBank(bankId));
     }
 
@@ -56,7 +56,7 @@ public class BankController {
      * @return A ResponseEntity containing the updated BankDto with status OK.
      */
     @PutMapping
-    public ResponseEntity<BankDto> updateBank(@RequestBody BankDto bankDto){
+    public ResponseEntity<Bank> updateBank(@RequestBody Bank bankDto){
         return ResponseEntity.ok(bankService.updateBank(bankDto));
     }
 
@@ -80,7 +80,7 @@ public class BankController {
      * @return A ResponseEntity containing a list of BankDto with status OK.
      */
     @GetMapping
-    public ResponseEntity<List<BankDto>> findAllBanks(){
+    public ResponseEntity<List<Bank>> findAllBanks(){
         return ResponseEntity.ok(bankService.findAllBanks());
     }
 

@@ -1,7 +1,7 @@
 package com.finStream.bankmanagementservice.service;
 
+import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
-import com.finStream.bankmanagementservice.dto.BankRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public interface IBankService {
      * @param bankRequest The object containing bank data to be saved.
      * @return The newly created bank as a BankDto object.
      */
-    BankDto createBank(BankRequest bankRequest);
+    Bank createBank(BankDto bankRequest);
 
     /**
      * Updates a bank based on the provided bank data (DTO).
@@ -27,7 +27,7 @@ public interface IBankService {
      * @param bankDto The DTO object containing updated bank data.
      * @return The updated bank as a BankDto object.
      */
-    BankDto updateBank(BankDto bankDto);
+    Bank updateBank(Bank bankDto);
 
     /**
      * Retrieves a bank by its unique identifier (bankId).
@@ -35,7 +35,7 @@ public interface IBankService {
      * @param bankId The unique identifier of the bank to retrieve.
      * @return The bank as a BankDto object with the specified bankId.
      */
-    BankDto getBank(UUID bankId);
+    Bank getBank(UUID bankId);
 
     /**
      * Deletes a bank with the specified bankId.
@@ -50,5 +50,5 @@ public interface IBankService {
      *
      * @return A list of BankDto objects representing all banks.
      */
-    List<BankDto> findAllBanks();
+    List<Bank> findAllBanks();
 }
