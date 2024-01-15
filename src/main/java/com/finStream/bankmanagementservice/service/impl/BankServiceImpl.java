@@ -10,7 +10,7 @@ import com.finStream.bankmanagementservice.exception.BankNotFoundException;
 import com.finStream.bankmanagementservice.exception.BankShortNameConflictException;
 import com.finStream.bankmanagementservice.mapper.BankMapper;
 import com.finStream.bankmanagementservice.repository.BankRepository;
-import com.finStream.bankmanagementservice.service.IBankService;
+import com.finStream.bankmanagementservice.service.interfaces.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

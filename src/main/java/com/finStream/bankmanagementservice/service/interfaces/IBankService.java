@@ -1,4 +1,4 @@
-package com.finStream.bankmanagementservice.service;
+package com.finStream.bankmanagementservice.service.interfaces;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;

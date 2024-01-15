@@ -3,7 +3,7 @@ package com.finStream.bankmanagementservice.controller;
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
 import com.finStream.bankmanagementservice.dto.VerifyBankDto;
-import com.finStream.bankmanagementservice.service.IBankService;
+import com.finStream.bankmanagementservice.service.interfaces.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
