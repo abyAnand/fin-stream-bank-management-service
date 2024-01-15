@@ -2,6 +2,7 @@ package com.finStream.bankmanagementservice.service;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.VerifyBankDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,8 @@ public interface IBankService {
      * @return The updated bank as a BankDto object.
      */
     Bank updateBank(Bank bankDto);
+
+    boolean verifyBank(VerifyBankDto verifyBankDto);
 
     /**
      * Retrieves a bank by its unique identifier (bankId).

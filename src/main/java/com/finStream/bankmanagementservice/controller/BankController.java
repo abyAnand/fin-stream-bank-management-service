@@ -2,6 +2,7 @@ package com.finStream.bankmanagementservice.controller;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.VerifyBankDto;
 import com.finStream.bankmanagementservice.service.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,6 @@ import java.util.UUID;
 public class BankController {
 
     private final IBankService bankService;
-
 
     /**
      * Creates a new bank based on the provided request data.
@@ -58,6 +58,12 @@ public class BankController {
     @PutMapping
     public ResponseEntity<Bank> updateBank(@RequestBody Bank bankDto){
         return ResponseEntity.ok(bankService.updateBank(bankDto));
+    }
+
+    @PutMapping("/verify")
+    public ResponseEntity<Boolean> verifyBank(@RequestBody VerifyBankDto verifyBankDto) {
+        boolean verificationResult = bankService.verifyBank(verifyBankDto);
+        return ResponseEntity.ok(verificationResult);
     }
 
 

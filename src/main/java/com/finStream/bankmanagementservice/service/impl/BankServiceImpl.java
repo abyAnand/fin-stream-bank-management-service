@@ -2,6 +2,7 @@ package com.finStream.bankmanagementservice.service.impl;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.VerifyBankDto;
 import com.finStream.bankmanagementservice.entity.BankEntity;
 import com.finStream.bankmanagementservice.enums.Status;
 import com.finStream.bankmanagementservice.exception.BankNameConflictException;
@@ -77,6 +78,17 @@ public class BankServiceImpl implements IBankService {
 
         return bankMapper.mapBankToBankDto(savedBank);
     }
+
+    @Override
+    public boolean verifyBank(VerifyBankDto verifyBankDto) {
+        BankEntity bank = bankRepository.findById(verifyBankDto.getBankId()).orElseThrow(
+                () -> new BankNotFoundException("User not found with id: " + verifyBankDto.getBankId())
+        );
+
+        bank.setVerified(true);
+        return true;
+    }
+
 
     private BankEntity getBankOrThrow(UUID bankId) {
         return bankRepository.findById(bankId)
