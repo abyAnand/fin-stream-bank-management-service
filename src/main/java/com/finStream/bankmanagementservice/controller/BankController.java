@@ -2,8 +2,9 @@ package com.finStream.bankmanagementservice.controller;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.BankSettingDto;
 import com.finStream.bankmanagementservice.dto.VerifyBankDto;
-import com.finStream.bankmanagementservice.service.IBankService;
+import com.finStream.bankmanagementservice.service.interfaces.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,6 +89,11 @@ public class BankController {
     @GetMapping
     public ResponseEntity<List<Bank>> findAllBanks(){
         return ResponseEntity.ok(bankService.findAllBanks());
+    }
+
+    @GetMapping("/{bankId}/accounts")
+    public List<BankSettingDto> findAllAccountsByBankId(@PathVariable UUID bankId){
+        return ResponseEntity.ok(bankService.findAllAccountsByBankId(bankId)).getBody();
     }
 
 }
