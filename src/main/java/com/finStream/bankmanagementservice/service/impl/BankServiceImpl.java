@@ -2,21 +2,26 @@ package com.finStream.bankmanagementservice.service.impl;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.BankSettingDto;
 import com.finStream.bankmanagementservice.dto.VerifyBankDto;
+import com.finStream.bankmanagementservice.entity.AccountBankSetting;
 import com.finStream.bankmanagementservice.entity.BankEntity;
+import com.finStream.bankmanagementservice.entity.bankSetting.*;
+import com.finStream.bankmanagementservice.enums.AccountType;
 import com.finStream.bankmanagementservice.enums.Status;
 import com.finStream.bankmanagementservice.exception.BankNameConflictException;
 import com.finStream.bankmanagementservice.exception.BankNotFoundException;
 import com.finStream.bankmanagementservice.exception.BankShortNameConflictException;
+import com.finStream.bankmanagementservice.mapper.AccountMapper;
 import com.finStream.bankmanagementservice.mapper.BankMapper;
+import com.finStream.bankmanagementservice.repository.AccountBankSettingRepository;
 import com.finStream.bankmanagementservice.repository.BankRepository;
 import com.finStream.bankmanagementservice.service.interfaces.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +40,9 @@ public class BankServiceImpl implements IBankService {
 
     private final BankRepository bankRepository;
     private final BankMapper bankMapper;
+    private final AccountMapper accountMapper;
+    private final AccountBankSettingRepository accountBankSettingRepository;
+
     /**
      * Creates a new bank based on the provided bank request data.
      *
@@ -159,6 +167,73 @@ public class BankServiceImpl implements IBankService {
                 .map(bankMapper::mapBankToBankDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * @param bankId
+     * @return
+     */
+
+    /**
+     * @param bankId
+     * @return
+     */
+    @Override
+    public List<BankSettingDto> findAllAccountsByBankId(UUID bankId) {
+        List<BankSettingDto> bankSettingDtoList = new ArrayList<>();
+
+        for (AccountType accountType : AccountType.values()) {
+            List<? extends AccountBankSetting> accountBankSettings = getAccountSettingByType(bankId, accountType);
+            bankSettingDtoList.addAll(accountBankSettings.stream()
+                    .map(accountBankSetting -> mapAccountSettingToDto(accountBankSetting, accountType.name()))
+                    .toList());
+        }
+
+        bankSettingDtoList.forEach(System.out::println);
+
+        return bankSettingDtoList;
+    }
+
+    private List<? extends AccountBankSetting> getAccountSettingByType(UUID bankId, AccountType accountType) {
+        return switch (accountType) {
+            case CHECKING -> accountBankSettingRepository.findAllCheckingAccountsBankSettingByBankId(bankId);
+            case FD -> accountBankSettingRepository.findAllFDAccountsBankSettingByBankId(bankId);
+            case JOINT -> accountBankSettingRepository.findAllJointAccountsBankSettingByBankId(bankId);
+            case MONEY_MARKET -> accountBankSettingRepository.findAllMoneyMarketAccountsBankSettingByBankId(bankId);
+            case SAVINGS -> accountBankSettingRepository.findAllSavingsAccountsBankSettingByBankId(bankId);
+            default -> Collections.emptyList();
+        };
+    }
+
+    private BankSettingDto mapAccountSettingToDto(AccountBankSetting accountBankSetting, String accountType) {
+        BankSettingDto bankSettingDto;
+
+        switch (accountType) {
+            case "CHECKING":
+                bankSettingDto = accountMapper.mapCheckingAccountsBankSettingToBankSettingDto((CheckingAccountsBankSetting) accountBankSetting);
+                break;
+            case "FD":
+                bankSettingDto = accountMapper.mapFDAccountsBankSettingToBankSettingDto((FDAccountsBankSetting) accountBankSetting);
+                break;
+            case "JOINT":
+                bankSettingDto = accountMapper.mapJointAccountsBankSettingToBankSettingDto((JointAccountsBankSetting) accountBankSetting);
+                break;
+            case "MONEY_MARKET":
+                bankSettingDto = accountMapper.mapMoneyMarketAccountsBankSettingToBankSettingDto((MoneyMarketAccountsBankSetting) accountBankSetting);
+                break;
+            case "SAVINGS":
+                bankSettingDto = accountMapper.mapSavingsAccountsBankSettingToBankSettingDto((SavingsAccountsBankSetting) accountBankSetting);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported account type: " + accountType);
+        }
+
+        // Set the accountType in the BankSettingDto
+        bankSettingDto.setAccountType(AccountType.valueOf(accountType));
+
+        return bankSettingDto;
+    }
+
+
 
 
     /**

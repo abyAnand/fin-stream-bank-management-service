@@ -1,9 +1,7 @@
 package com.finStream.bankmanagementservice.entity.bankSetting;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.finStream.bankmanagementservice.entity.AccountBankSetting;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,21 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CheckingAccountsBankSetting {
-
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
-
-    private UUID bankId;
-
-    private String ACCOUNT_NAME;
+@DiscriminatorValue("CHECKING")
+public class CheckingAccountsBankSetting extends AccountBankSetting {
 
     private BigDecimal overdraftLimit;
-
 }

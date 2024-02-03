@@ -11,15 +11,17 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 public class BankSettingDto {
 
+    private UUID id;
 
     private UUID bankId;
 
     private AccountType accountType;
 
-    private String ACCOUNT_NAME;
+    private String accountName;
 
     private BigDecimal overdraftLimit;
 
@@ -30,4 +32,6 @@ public class BankSettingDto {
     private int maxMonthlyTransactions;
 
     private BigDecimal interestRate;
+
+
 }

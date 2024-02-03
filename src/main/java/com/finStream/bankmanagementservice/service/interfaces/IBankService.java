@@ -2,6 +2,7 @@ package com.finStream.bankmanagementservice.service.interfaces;
 
 import com.finStream.bankmanagementservice.dto.Bank;
 import com.finStream.bankmanagementservice.dto.BankDto;
+import com.finStream.bankmanagementservice.dto.BankSettingDto;
 import com.finStream.bankmanagementservice.dto.VerifyBankDto;
 
 import java.util.List;
@@ -54,4 +55,6 @@ public interface IBankService {
      * @return A list of BankDto objects representing all banks.
      */
     List<Bank> findAllBanks();
+
+    List<BankSettingDto> findAllAccountsByBankId(UUID bankId);
 }
