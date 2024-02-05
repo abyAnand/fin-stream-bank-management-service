@@ -1,10 +1,10 @@
 package com.finStream.bankmanagementservice.controller;
 
-import com.finStream.bankmanagementservice.dto.Bank;
-import com.finStream.bankmanagementservice.dto.BankDto;
-import com.finStream.bankmanagementservice.dto.BankSettingDto;
-import com.finStream.bankmanagementservice.dto.VerifyBankDto;
-import com.finStream.bankmanagementservice.service.interfaces.IBankService;
+import com.finStream.bankmanagementservice.dto.bank.Bank;
+import com.finStream.bankmanagementservice.dto.bank.BankDto;
+import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
+import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
+import com.finStream.bankmanagementservice.service.bank.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,8 +92,8 @@ public class BankController {
     }
 
     @GetMapping("/{bankId}/accounts")
-    public List<BankSettingDto> findAllAccountsByBankId(@PathVariable UUID bankId){
-        return ResponseEntity.ok(bankService.findAllAccountsByBankId(bankId)).getBody();
+    public List<AccountSettingDto> findAllAccountsByBankId(@PathVariable UUID bankId){
+        return bankService.findAllAccountsByBankId(bankId);
     }
 
 }

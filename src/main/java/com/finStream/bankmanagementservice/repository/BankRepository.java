@@ -1,6 +1,6 @@
 package com.finStream.bankmanagementservice.repository;
 
-import com.finStream.bankmanagementservice.entity.BankEntity;
+import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

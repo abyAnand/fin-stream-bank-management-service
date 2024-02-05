@@ -1,9 +1,9 @@
 package com.finStream.bankmanagementservice.mapper;
 
 
-import com.finStream.bankmanagementservice.dto.BankSettingDto;
-import com.finStream.bankmanagementservice.entity.AccountBankSetting;
-import com.finStream.bankmanagementservice.entity.bankSetting.*;
+import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
+import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
+import com.finStream.bankmanagementservice.entity.accountSetting.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,16 +12,16 @@ public interface AccountMapper {
 
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    BankSettingDto mapAccountBankSettingToBankSettingDto(AccountBankSetting accountBankSetting);
+    AccountSettingDto mapAccountSettingToAccountSettingDto(AccountSetting accountSetting);
 
-    BankSettingDto mapCheckingAccountsBankSettingToBankSettingDto(CheckingAccountsBankSetting bankSetting);
+    AccountSettingDto mapCheckingAccountsSettingToAccountSettingDto(CheckingAccountsSetting bankSetting);
 
-    BankSettingDto mapFDAccountsBankSettingToBankSettingDto(FDAccountsBankSetting bankSetting);
+    AccountSettingDto mapFDAccountsSettingToAccountSettingDto(FDAccountsSetting bankSetting);
 
-    BankSettingDto mapJointAccountsBankSettingToBankSettingDto(JointAccountsBankSetting bankSetting);
+    AccountSettingDto mapJointAccountsSettingToAccountSettingDto(JointAccountsSetting bankSetting);
 
-    BankSettingDto mapMoneyMarketAccountsBankSettingToBankSettingDto(MoneyMarketAccountsBankSetting bankSetting);
+    AccountSettingDto mapMoneyMarketAccountsSettingToAccountSettingDto(MoneyMarketAccountsSetting bankSetting);
 
-    BankSettingDto mapSavingsAccountsBankSettingToBankSettingDto(SavingsAccountsBankSetting bankSetting);
+    AccountSettingDto mapSavingsAccountsSettingToAccountSettingDto(SavingsAccountsSetting bankSetting);
 
 }
