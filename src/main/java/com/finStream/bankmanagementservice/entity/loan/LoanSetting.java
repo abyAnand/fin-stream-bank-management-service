@@ -35,6 +35,7 @@ public class LoanSetting {
     private double loanAmount;
 
     private int loanTermMonths;
+
     private boolean deleted;
 
     @CreatedDate
