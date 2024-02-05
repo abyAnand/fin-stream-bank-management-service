@@ -1,9 +1,9 @@
 package com.finStream.bankmanagementservice.advice;
 
 import com.finStream.bankmanagementservice.dto.ApiError;
-import com.finStream.bankmanagementservice.exception.BankNameConflictException;
-import com.finStream.bankmanagementservice.exception.BankNotFoundException;
-import com.finStream.bankmanagementservice.exception.BankShortNameConflictException;
+import com.finStream.bankmanagementservice.exception.bank.BankNameConflictException;
+import com.finStream.bankmanagementservice.exception.bank.BankNotFoundException;
+import com.finStream.bankmanagementservice.exception.bank.BankShortNameConflictException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

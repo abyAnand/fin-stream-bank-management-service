@@ -1,32 +1,31 @@
 package com.finStream.bankmanagementservice.repository;
 
-import com.finStream.bankmanagementservice.entity.AccountBankSetting;
-import com.finStream.bankmanagementservice.entity.bankSetting.*;
+import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
+import com.finStream.bankmanagementservice.entity.accountSetting.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AccountBankSettingRepository extends JpaRepository<AccountBankSetting, UUID> {
+public interface AccountBankSettingRepository extends JpaRepository<AccountSetting, UUID> {
 
-    List<? extends AccountBankSetting> findAllAccountsByBankId(UUID bankId);
+    List<? extends AccountSetting> findAllAccountsByBankId(UUID bankId);
 
-    List<CheckingAccountsBankSetting> findAllCheckingAccountsBankSettingByBankId(UUID bankId);
+    List<CheckingAccountsSetting> findAllCheckingAccountsBankSettingByBankId(UUID bankId);
 
-    List<FDAccountsBankSetting> findAllFDAccountsBankSettingByBankId(UUID bankId);
+    List<FDAccountsSetting> findAllFDAccountsBankSettingByBankId(UUID bankId);
 
-    List<JointAccountsBankSetting> findAllJointAccountsBankSettingByBankId(UUID bankId);
+    List<JointAccountsSetting> findAllJointAccountsBankSettingByBankId(UUID bankId);
 
-    List<MoneyMarketAccountsBankSetting> findAllMoneyMarketAccountsBankSettingByBankId(UUID bankId);
+    List<MoneyMarketAccountsSetting> findAllMoneyMarketAccountsBankSettingByBankId(UUID bankId);
 
-    List<SavingsAccountsBankSetting> findAllSavingsAccountsBankSettingByBankId(UUID bankId);
+    List<SavingsAccountsSetting> findAllSavingsAccountsBankSettingByBankId(UUID bankId);
 
-    CheckingAccountsBankSetting findCheckingAccountsBankSettingById(UUID id);
-    FDAccountsBankSetting findFDAccountsBankSettingById(UUID id);
-    JointAccountsBankSetting findJointAccountsBankSettingById(UUID id);
-    MoneyMarketAccountsBankSetting findMoneyMarketAccountsBankSettingById(UUID id);
-    SavingsAccountsBankSetting findSavingsAccountsBankSettingById(UUID id);
+    CheckingAccountsSetting findCheckingAccountsBankSettingById(UUID id);
+    FDAccountsSetting findFDAccountsBankSettingById(UUID id);
+    JointAccountsSetting findJointAccountsBankSettingById(UUID id);
+    MoneyMarketAccountsSetting findMoneyMarketAccountsBankSettingById(UUID id);
+    SavingsAccountsSetting findSavingsAccountsBankSettingById(UUID id);
 }
