@@ -25,6 +25,8 @@ public class LoanTypeServiceImpl implements ILoanType{
     private final LoanTypeRepository loanTypeRepository;
     private final LoanSettingRepository loanSettingRepository;
     private final LoanServiceImpl loanService;
+
+
     /**
      * @param loanSettingDto
      * @return
@@ -47,6 +49,23 @@ public class LoanTypeServiceImpl implements ILoanType{
         loanTypeDto.setLoanSettingList(fetchLoanSettingList(id));
 
         return loanTypeDto;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<LoanTypeDto> getAllLoanTypes() {
+        List<LoanType> loanTypeList = loanTypeRepository.findAll();
+
+        return loanTypeList
+                .stream()
+                .map(loanType -> {
+                    LoanTypeDto loanTypeDto = convertToDto(loanType);
+                    loanTypeDto.setLoanSettingList(fetchLoanSettingList(loanTypeDto.getId()));
+                    return loanTypeDto;
+                })
+                .toList();
     }
 
     /**

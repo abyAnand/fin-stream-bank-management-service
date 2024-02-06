@@ -22,6 +22,11 @@ public class LoanTypeController {
         return ResponseEntity.ok(loanTypeSevice.createLoanType(loanSettingDto));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<LoanTypeDto>> getAllLoanTypes(){
+        return ResponseEntity.ok(loanTypeSevice.getAllLoanTypes());
+    }
+
     @GetMapping("/list/{bankId}")
     public ResponseEntity<List<LoanTypeDto>> getLoanTypeList(@PathVariable UUID bankId){
         return ResponseEntity.ok(loanTypeSevice.getAllLoanTypeByBankId(bankId));

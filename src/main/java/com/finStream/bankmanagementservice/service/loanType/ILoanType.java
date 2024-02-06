@@ -12,6 +12,8 @@ public interface ILoanType {
 
     LoanTypeDto getLoanTypeById(UUID id);
 
+    List<LoanTypeDto> getAllLoanTypes();
+
     List<LoanTypeDto> getAllLoanTypeByBankId(UUID bankId);
 
     LoanTypeDto updateLoanType(LoanTypeDto loanSettingDto);

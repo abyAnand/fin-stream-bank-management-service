@@ -55,7 +55,7 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     /**
-     * @param bankId
+     * @param loanTypeId
      * @return
      */
     @Override
