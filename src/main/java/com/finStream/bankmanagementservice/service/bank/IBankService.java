@@ -31,7 +31,7 @@ public interface IBankService {
      */
     Bank updateBank(Bank bankDto);
 
-    boolean verifyBank(VerifyBankDto verifyBankDto);
+    boolean verifyBank(UUID bankId);
 
     /**
      * Retrieves a bank by its unique identifier (bankId).

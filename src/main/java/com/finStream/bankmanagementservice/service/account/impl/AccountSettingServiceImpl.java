@@ -10,6 +10,9 @@ import com.finStream.bankmanagementservice.service.account.interfaces.IAccountSe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AccountSettingServiceImpl implements IAccountSettingService {
@@ -44,6 +47,9 @@ public class AccountSettingServiceImpl implements IAccountSettingService {
         }
 
         AccountSettingDto accountSettingDto = new AccountSettingDto();
+        if(accountSetting.getId() != null){
+            accountSettingDto.setId(accountSetting.getId());
+        }
         accountSettingDto.setBankId(accountSetting.getBankId());
         accountSettingDto.setAccountName(accountSetting.getAccountName());
 
@@ -72,6 +78,13 @@ public class AccountSettingServiceImpl implements IAccountSettingService {
         }
 
         return accountSettingDto;
+    }
+
+    @Override
+    public AccountSettingDto getAccountSettingById(UUID accountId) {
+
+        Optional<AccountSetting> accountSettingOptional = accountBankSettingRepository.findById(accountId);
+        return accountSettingOptional.map(this::convertToDto).orElse(null);
     }
 
 

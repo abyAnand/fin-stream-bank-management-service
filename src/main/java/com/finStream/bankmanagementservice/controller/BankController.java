@@ -3,8 +3,8 @@ package com.finStream.bankmanagementservice.controller;
 import com.finStream.bankmanagementservice.dto.bank.Bank;
 import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
-import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
-import com.finStream.bankmanagementservice.service.bank.IBankService;
+import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
+import com.finStream.bankmanagementservice.service.bank.impl.BankServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BankController {
 
-    private final IBankService bankService;
+    private final BankServiceImpl bankService;
 
     /**
      * Creates a new bank based on the provided request data.
@@ -61,9 +61,9 @@ public class BankController {
         return ResponseEntity.ok(bankService.updateBank(bankDto));
     }
 
-    @PutMapping("/verify")
-    public ResponseEntity<Boolean> verifyBank(@RequestBody VerifyBankDto verifyBankDto) {
-        boolean verificationResult = bankService.verifyBank(verifyBankDto);
+    @GetMapping("/verify/{bankId}")
+    public ResponseEntity<Boolean> verifyBank(@PathVariable UUID bankId) {
+        boolean verificationResult = bankService.verifyBank(bankId);
         return ResponseEntity.ok(verificationResult);
     }
 
@@ -94,6 +94,11 @@ public class BankController {
     @GetMapping("/{bankId}/accounts")
     public List<AccountSettingDto> findAllAccountsByBankId(@PathVariable UUID bankId){
         return bankService.findAllAccountsByBankId(bankId);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<BankInfoDto>> getAllBankInfoList(){
+        return ResponseEntity.ok(bankService.getAllBankInfoDto());
     }
 
 }

@@ -3,10 +3,14 @@ package com.finStream.bankmanagementservice.service.bank.impl;
 import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
 import com.finStream.bankmanagementservice.dto.bank.Bank;
 import com.finStream.bankmanagementservice.dto.bank.BankDto;
+import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
 import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
+import com.finStream.bankmanagementservice.dto.loan.LoanSettingDto;
 import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
 import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import com.finStream.bankmanagementservice.entity.accountSetting.*;
+import com.finStream.bankmanagementservice.entity.loan.LoanSetting;
+import com.finStream.bankmanagementservice.entity.loan.LoanType;
 import com.finStream.bankmanagementservice.enums.AccountType;
 import com.finStream.bankmanagementservice.enums.Status;
 import com.finStream.bankmanagementservice.exception.bank.BankNameConflictException;
@@ -14,8 +18,12 @@ import com.finStream.bankmanagementservice.exception.bank.BankNotFoundException;
 import com.finStream.bankmanagementservice.exception.bank.BankShortNameConflictException;
 import com.finStream.bankmanagementservice.mapper.AccountMapper;
 import com.finStream.bankmanagementservice.mapper.BankMapper;
+import com.finStream.bankmanagementservice.mapper.LoanMapper;
+import com.finStream.bankmanagementservice.mapper.LoanTypeMapper;
 import com.finStream.bankmanagementservice.repository.AccountBankSettingRepository;
 import com.finStream.bankmanagementservice.repository.BankRepository;
+import com.finStream.bankmanagementservice.repository.LoanSettingRepository;
+import com.finStream.bankmanagementservice.repository.LoanTypeRepository;
 import com.finStream.bankmanagementservice.service.bank.IBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +49,11 @@ public class BankServiceImpl implements IBankService {
     private final BankRepository bankRepository;
     private final BankMapper bankMapper;
     private final AccountMapper accountMapper;
+    private final LoanMapper loanMapper;
+    private final LoanTypeMapper loanTypeMapper;
     private final AccountBankSettingRepository accountBankSettingRepository;
+    private final LoanSettingRepository loanSettingRepository;
+    private final LoanTypeRepository loanTypeRepository;
 
     /**
      * Creates a new bank based on the provided bank request data.
@@ -88,12 +100,13 @@ public class BankServiceImpl implements IBankService {
     }
 
     @Override
-    public boolean verifyBank(VerifyBankDto verifyBankDto) {
-        BankEntity bank = bankRepository.findById(verifyBankDto.getBankId()).orElseThrow(
-                () -> new BankNotFoundException("User not found with id: " + verifyBankDto.getBankId())
+    public boolean verifyBank(UUID bankId) {
+        BankEntity bank = bankRepository.findById(bankId).orElseThrow(
+                () -> new BankNotFoundException("User not found with id: " + bankId)
         );
 
         bank.setVerified(true);
+        bankRepository.save(bank);
         return true;
     }
 
@@ -119,6 +132,59 @@ public class BankServiceImpl implements IBankService {
                         throw new BankShortNameConflictException("Bank with shortname '" + bankDto.getShortName() + "' already exists.");
                     }
                 });
+    }
+
+    public List<BankInfoDto> getAllBankInfoDto(){
+        List<BankEntity> bank = bankRepository.findAll();
+        List<BankInfoDto> list = bank.stream()
+                .map(bankEntity -> getBankInfo(bankEntity.getId()))
+                .toList();
+        return list;
+    }
+
+    /**
+     * Retrieves bank details along with associated account settings and loan settings.
+     *
+     * @param bankId The UUID of the bank to retrieve.
+     * @return The bank details along with associated account settings and loan settings.
+     */
+    public BankInfoDto getBankInfo(UUID bankId) {
+        BankEntity bank = bankRepository.findById(bankId)
+                .orElseThrow(() -> new BankNotFoundException("Bank not found with id: " + bankId));
+
+        Bank bankDto = bankMapper.mapBankToBankDto(bank);
+        List<AccountSettingDto> accountSettings = findAllAccountsByBankId(bankId);
+        List<LoanSettingDto> loanSettings = findAllLoanSettingsByBankId(bankId);
+
+        return new BankInfoDto(
+                bankDto.getId(),
+                bankDto.getName(),
+                bankDto.getShortName(),
+                bankDto.getEmail(),
+                bankDto.isVerified(),
+                accountSettings,
+                loanSettings
+        );
+    }
+
+    /**
+     * Retrieves all loan settings associated with a bank.
+     *
+     * @param bankId The UUID of the bank.
+     * @return A list of loan settings associated with the bank.
+     */
+    public List<LoanSettingDto> findAllLoanSettingsByBankId(UUID bankId) {
+        List<LoanType> loanTypeList = loanTypeRepository.findAllByBankId(bankId);
+
+        return loanTypeList.stream()
+                .flatMap(loanType -> loanSettingRepository.findAllByLoanTypeId(loanType.getId())
+                        .stream()
+                        .map(loanSetting -> {
+                            LoanSettingDto loanSettingDto = loanMapper.mapLoanSettingToLoanSettingDto(loanSetting);
+                            loanSettingDto.setLoanTypeDto(loanTypeMapper.mapLoanTypeToLoanTypeDto(loanType));
+                            return loanSettingDto;
+                        }))
+                .collect(Collectors.toList());
     }
 
     /**

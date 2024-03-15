@@ -41,4 +41,9 @@ public class AccountSettingsController {
     public ResponseEntity<AccountSettingDto> updateAccountSetting(@RequestBody AccountSettingDto accountSettingDto){
         return ResponseEntity.ok(accountSettingService.updateAccountSetting(accountSettingDto));
     }
+
+    @GetMapping("/settingId/{accountSettingId}")
+    public ResponseEntity<AccountSettingDto> getAccountSettingById(@PathVariable("accountSettingId") UUID accountSettingId){
+        return ResponseEntity.ok(accountSettingService.getAccountSettingById(accountSettingId));
+    }
 }

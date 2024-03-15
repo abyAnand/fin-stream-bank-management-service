@@ -14,6 +14,7 @@ public abstract class AbstractAccountSettingFactory implements AccountSettingFac
 
     protected void setCommonFields(AccountSetting settings, AccountSettingDto accountSettingDto) {
         settings.setBankId(accountSettingDto.getBankId());
+
         settings.setAccountName(accountSettingDto.getAccountName());
     }
 }
