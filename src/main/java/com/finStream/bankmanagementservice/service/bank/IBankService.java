@@ -4,6 +4,7 @@ import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
 import com.finStream.bankmanagementservice.dto.bank.Bank;
 import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
+import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,4 +58,6 @@ public interface IBankService {
     List<Bank> findAllBanks();
 
     List<AccountSettingDto> findAllAccountsByBankId(UUID bankId);
+
+    List<BankEntity> getAllBankEntity();
 }

@@ -4,6 +4,7 @@ import com.finStream.bankmanagementservice.dto.bank.Bank;
 import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
 import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
+import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import com.finStream.bankmanagementservice.service.bank.impl.BankServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -99,6 +100,11 @@ public class BankController {
     @GetMapping("/all")
     public ResponseEntity<List<BankInfoDto>> getAllBankInfoList(){
         return ResponseEntity.ok(bankService.getAllBankInfoDto());
+    }
+
+    @GetMapping("/all/bank")
+    public ResponseEntity<List<BankEntity>> getAllBankEntity(){
+        return ResponseEntity.ok(bankService.getAllBankEntity());
     }
 
 }

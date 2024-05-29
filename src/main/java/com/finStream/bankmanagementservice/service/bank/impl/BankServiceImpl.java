@@ -259,6 +259,11 @@ public class BankServiceImpl implements IBankService {
         return accountSettingDtoList;
     }
 
+    @Override
+    public List<BankEntity> getAllBankEntity() {
+        return bankRepository.findAll();
+    }
+
     private List<? extends AccountSetting> getAccountSettingByType(UUID bankId, AccountType accountType) {
         return switch (accountType) {
             case CHECKING -> accountBankSettingRepository.findAllCheckingAccountsBankSettingByBankId(bankId);
