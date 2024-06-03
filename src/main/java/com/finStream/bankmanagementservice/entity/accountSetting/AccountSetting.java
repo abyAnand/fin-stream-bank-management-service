@@ -1,5 +1,6 @@
 package com.finStream.bankmanagementservice.entity.accountSetting;
 
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.bank.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,4 +32,6 @@ public class AccountSetting extends BaseEntity {
     private UUID bankId;
 
     private String accountName;
+
+    private int imageId;
 }

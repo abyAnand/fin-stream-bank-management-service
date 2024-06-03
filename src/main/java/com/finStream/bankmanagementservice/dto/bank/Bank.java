@@ -1,5 +1,6 @@
 package com.finStream.bankmanagementservice.dto.bank;
 
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.enums.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,6 +29,7 @@ public class Bank {
     private UUID id;
     private String name;
     private String shortName;
+    private Image image;
     private boolean verified;
     @Enumerated(EnumType.STRING)
     private Status status;

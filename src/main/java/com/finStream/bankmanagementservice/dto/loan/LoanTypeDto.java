@@ -1,5 +1,6 @@
 package com.finStream.bankmanagementservice.dto.loan;
 
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.loan.LoanSetting;
 import com.finStream.bankmanagementservice.enums.LoanCategory;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,8 @@ public class LoanTypeDto {
     private UUID bankId;
 
     private String name;
+
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     private LoanCategory loanCategory;

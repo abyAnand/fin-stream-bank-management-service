@@ -25,6 +25,7 @@ import com.finStream.bankmanagementservice.repository.BankRepository;
 import com.finStream.bankmanagementservice.repository.LoanSettingRepository;
 import com.finStream.bankmanagementservice.repository.LoanTypeRepository;
 import com.finStream.bankmanagementservice.service.bank.IBankService;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,7 @@ public class BankServiceImpl implements IBankService {
     private final AccountBankSettingRepository accountBankSettingRepository;
     private final LoanSettingRepository loanSettingRepository;
     private final LoanTypeRepository loanTypeRepository;
+    private final ImageService imageService;
 
     /**
      * Creates a new bank based on the provided bank request data.
@@ -92,10 +94,9 @@ public class BankServiceImpl implements IBankService {
         BankEntity existingBank = getBankOrThrow(bankDto.getId());
         validateBankName(bankDto, existingBank);
         validateBankShortName(bankDto, existingBank);
-
         BankEntity updatedBank = bankMapper.mapBankDtoToBank(bankDto);
+        updatedBank.setImageId(bankDto.getImage().getId());
         BankEntity savedBank = bankRepository.save(updatedBank);
-
         return bankMapper.mapBankToBankDto(savedBank);
     }
 
@@ -198,7 +199,9 @@ public class BankServiceImpl implements IBankService {
     public Bank getBank(UUID bankId) {
         BankEntity bank = bankRepository.findById(bankId)
                 .orElseThrow(() -> new BankNotFoundException("Bank not found with id: " + bankId));
-        return bankMapper.mapBankToBankDto(bank);
+        Bank userBank = bankMapper.mapBankToBankDto(bank);
+        userBank.setImage(imageService.getOne(bank.getImageId()));
+        return userBank;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.finStream.bankmanagementservice.dto.account;
 
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.enums.AccountType;
 import lombok.*;
 
@@ -18,6 +19,8 @@ public class AccountSettingDto {
     private UUID id;
 
     private UUID bankId;
+
+    private Image image;
 
     private AccountType accountType;
 
