@@ -6,6 +6,7 @@ import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
 import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
 import com.finStream.bankmanagementservice.dto.loan.LoanSettingDto;
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
 import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import com.finStream.bankmanagementservice.entity.accountSetting.*;
@@ -233,8 +234,24 @@ public class BankServiceImpl implements IBankService {
         return bankRepository.findAll()
                 .stream()
                 .filter(this::isNotDeleted)
-                .map(bankMapper::mapBankToBankDto)
+                .map(this::mapBankEntityToBank)
                 .collect(Collectors.toList());
+    }
+
+
+    private Bank mapBankEntityToBank(BankEntity bankEntity) {
+        Image image = imageService.getOne(bankEntity.getImageId());
+        return new Bank(
+                bankEntity.getId(),
+                bankEntity.getName(),
+                bankEntity.getShortName(),
+                image,
+                bankEntity.isVerified(),
+                bankEntity.getStatus(),
+                bankEntity.getAddress(),
+                bankEntity.getEmail(),
+                bankEntity.getPhoneNumber()
+        );
     }
 
     /**
