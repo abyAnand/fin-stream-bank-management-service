@@ -2,15 +2,28 @@ spring:
   devtools:
     add-properties: false
   application:
-    name: "bank"
-  profiles:
-    active: "dev"
-  config:
-    import: "optional:configserver:http://localhost:8071/"
+    name: BANK-SERVICE
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLDialect
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fin_user
+    username: root
+    password: root
   cloud:
     config:
-      enabled: true
+      enabled: false
+
+
+server:
+  port: 9010
 
 eureka:
   client:
@@ -20,3 +33,22 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+
+  tracing:
+    sampling:
+      probability: 1.0
