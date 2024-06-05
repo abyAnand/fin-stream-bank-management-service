@@ -2,6 +2,7 @@ package com.finStream.bankmanagementservice.service.loanType;
 
 import com.finStream.bankmanagementservice.dto.loan.LoanSettingDto;
 import com.finStream.bankmanagementservice.dto.loan.LoanTypeDto;
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.loan.LoanSetting;
 import com.finStream.bankmanagementservice.entity.loan.LoanType;
 import com.finStream.bankmanagementservice.exception.loan.LoanSettingNotFoundException;
@@ -9,6 +10,7 @@ import com.finStream.bankmanagementservice.exception.loan.LoanTypeNotFoundExcept
 import com.finStream.bankmanagementservice.mapper.LoanTypeMapper;
 import com.finStream.bankmanagementservice.repository.LoanSettingRepository;
 import com.finStream.bankmanagementservice.repository.LoanTypeRepository;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import com.finStream.bankmanagementservice.service.loan.impl.LoanServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class LoanTypeServiceImpl implements ILoanType{
     private final LoanTypeRepository loanTypeRepository;
     private final LoanSettingRepository loanSettingRepository;
     private final LoanServiceImpl loanService;
+    private final ImageService imageService;
 
 
     /**
@@ -68,6 +71,8 @@ public class LoanTypeServiceImpl implements ILoanType{
                 .toList();
     }
 
+
+
     /**
      * @param bankId
      * @return
@@ -110,12 +115,24 @@ public class LoanTypeServiceImpl implements ILoanType{
                 .orElseThrow(() -> new LoanTypeNotFoundException("Could not find Loan Type with id: "+ id));
     }
 
-    public LoanTypeDto convertToDto(LoanType loanType){
-        return loanTypeMapper.mapLoanTypeToLoanTypeDto(loanType);
+    public LoanTypeDto convertToDto(LoanType loanType) {
+        LoanTypeDto loanTypeDto = loanTypeMapper.mapLoanTypeToLoanTypeDto(loanType);
+
+        if (loanType.getImageId() > 0) {
+            loanTypeDto.setImage(imageService.getOne(loanType.getImageId()));
+        } else {
+            loanTypeDto.setImage(null);
+        }
+
+        return loanTypeDto;
     }
 
     public LoanType convertToEntity(LoanTypeDto loanTypeDto){
-        return loanTypeMapper.mapLoanTypeDtoToLoanType(loanTypeDto);
+        LoanType loanType = loanTypeMapper.mapLoanTypeDtoToLoanType(loanTypeDto);
+        if(loanTypeDto.getImage() != null){
+            loanType.setImageId(loanTypeDto.getImage().getId());
+        }
+        return loanType;
     }
 
     private List<LoanSettingDto> fetchLoanSettingList(UUID loanTypeId) {

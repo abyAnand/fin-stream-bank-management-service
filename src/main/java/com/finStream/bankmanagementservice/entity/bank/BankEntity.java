@@ -42,6 +42,7 @@ public class BankEntity extends BaseEntity {
     private String shortName;
     private boolean verified;
     private Status status;
+    private int imageId;
     //TODO: add bank address. also uncomment in dto.
 //    @OneToOne
 //    @JoinColumn(name = "address_id")

@@ -1,12 +1,18 @@
 package com.finStream.bankmanagementservice.controller;
 
+import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
 import com.finStream.bankmanagementservice.dto.loan.LoanTypeDto;
 
+import com.finStream.bankmanagementservice.entity.Image;
+import com.finStream.bankmanagementservice.entity.loan.LoanType;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import com.finStream.bankmanagementservice.service.loanType.LoanTypeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,10 +22,20 @@ import java.util.UUID;
 public class LoanTypeController {
 
     private final LoanTypeServiceImpl loanTypeSevice;
+    private final ImageService imageService;
 
     @PostMapping
     public ResponseEntity<LoanTypeDto> createLoanType(@RequestBody LoanTypeDto loanSettingDto){
         return ResponseEntity.ok(loanTypeSevice.createLoanType(loanSettingDto));
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<LoanTypeDto> updateLoanTypeWithImage(@RequestPart("loanTypeId") String loanTypeId,
+                                                                  @RequestPart("image" ) MultipartFile multipartFile) throws IOException {
+        Image image = imageService.uploadAndSaveImage(multipartFile);
+        LoanTypeDto loanTypeDto = loanTypeSevice.getLoanTypeById(UUID.fromString(loanTypeId));
+        loanTypeDto.setImage(image);
+        return ResponseEntity.ok(loanTypeSevice.updateLoanType(loanTypeDto));
     }
 
     @GetMapping("/list")

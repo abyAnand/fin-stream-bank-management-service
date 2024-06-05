@@ -11,6 +11,7 @@ import com.finStream.bankmanagementservice.enums.AccountType;
 import com.finStream.bankmanagementservice.mapper.AccountMapper;
 import com.finStream.bankmanagementservice.mapper.BankMapper;
 import com.finStream.bankmanagementservice.repository.AccountBankSettingRepository;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class AccountTypeService {
     private final AccountBankSettingRepository accountBankSettingRepository;
     private final BankMapper bankMapper;
     private final AccountMapper accountMapper;
+    private final ImageService imageService;
 
     /**
      * Retrieves a list of {@link AccountSettingDto} based on the specified account type and bank ID.
@@ -44,7 +46,7 @@ public class AccountTypeService {
                 .map(accountBankSetting -> {
                     AccountSettingDto accountSettingDto = mapAccountSettingToDto(accountBankSetting, accountType);
                     accountSettingDto.setAccountType(AccountType.valueOf(accountType));
-                    System.out.println(accountSettingDto);
+                    accountSettingDto.setImage(imageService.getOne(accountBankSetting.getImageId()));
                     return accountSettingDto;
                 })
                 .collect(Collectors.toList());

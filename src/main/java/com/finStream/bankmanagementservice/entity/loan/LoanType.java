@@ -28,6 +28,8 @@ public class LoanType {
 
     private String name;
 
+    private int imageId;
+
     @Enumerated(EnumType.STRING)
     private LoanCategory loanCategory;
 

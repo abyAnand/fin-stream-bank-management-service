@@ -6,6 +6,7 @@ import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
 import com.finStream.bankmanagementservice.dto.bank.VerifyBankDto;
 import com.finStream.bankmanagementservice.dto.loan.LoanSettingDto;
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
 import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import com.finStream.bankmanagementservice.entity.accountSetting.*;
@@ -25,6 +26,7 @@ import com.finStream.bankmanagementservice.repository.BankRepository;
 import com.finStream.bankmanagementservice.repository.LoanSettingRepository;
 import com.finStream.bankmanagementservice.repository.LoanTypeRepository;
 import com.finStream.bankmanagementservice.service.bank.IBankService;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +56,7 @@ public class BankServiceImpl implements IBankService {
     private final AccountBankSettingRepository accountBankSettingRepository;
     private final LoanSettingRepository loanSettingRepository;
     private final LoanTypeRepository loanTypeRepository;
+    private final ImageService imageService;
 
     /**
      * Creates a new bank based on the provided bank request data.
@@ -92,10 +95,9 @@ public class BankServiceImpl implements IBankService {
         BankEntity existingBank = getBankOrThrow(bankDto.getId());
         validateBankName(bankDto, existingBank);
         validateBankShortName(bankDto, existingBank);
-
         BankEntity updatedBank = bankMapper.mapBankDtoToBank(bankDto);
+        updatedBank.setImageId(bankDto.getImage().getId());
         BankEntity savedBank = bankRepository.save(updatedBank);
-
         return bankMapper.mapBankToBankDto(savedBank);
     }
 
@@ -198,7 +200,9 @@ public class BankServiceImpl implements IBankService {
     public Bank getBank(UUID bankId) {
         BankEntity bank = bankRepository.findById(bankId)
                 .orElseThrow(() -> new BankNotFoundException("Bank not found with id: " + bankId));
-        return bankMapper.mapBankToBankDto(bank);
+        Bank userBank = bankMapper.mapBankToBankDto(bank);
+        userBank.setImage(imageService.getOne(bank.getImageId()));
+        return userBank;
     }
 
     /**
@@ -230,8 +234,24 @@ public class BankServiceImpl implements IBankService {
         return bankRepository.findAll()
                 .stream()
                 .filter(this::isNotDeleted)
-                .map(bankMapper::mapBankToBankDto)
+                .map(this::mapBankEntityToBank)
                 .collect(Collectors.toList());
+    }
+
+
+    private Bank mapBankEntityToBank(BankEntity bankEntity) {
+        Image image = imageService.getOne(bankEntity.getImageId());
+        return new Bank(
+                bankEntity.getId(),
+                bankEntity.getName(),
+                bankEntity.getShortName(),
+                image,
+                bankEntity.isVerified(),
+                bankEntity.getStatus(),
+                bankEntity.getAddress(),
+                bankEntity.getEmail(),
+                bankEntity.getPhoneNumber()
+        );
     }
 
     /**

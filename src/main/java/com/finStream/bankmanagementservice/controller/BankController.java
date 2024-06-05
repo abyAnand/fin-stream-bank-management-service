@@ -4,13 +4,17 @@ import com.finStream.bankmanagementservice.dto.bank.Bank;
 import com.finStream.bankmanagementservice.dto.bank.BankDto;
 import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
 import com.finStream.bankmanagementservice.dto.bank.BankInfoDto;
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.bank.BankEntity;
 import com.finStream.bankmanagementservice.service.bank.impl.BankServiceImpl;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +29,7 @@ import java.util.UUID;
 public class BankController {
 
     private final BankServiceImpl bankService;
+    private final ImageService imageService;
 
     /**
      * Creates a new bank based on the provided request data.
@@ -32,10 +37,21 @@ public class BankController {
      * @param bankRequest The data transfer object containing bank details.
      * @return A ResponseEntity containing the created BankDto with status CREATED.
      */
+
     @PostMapping
     public ResponseEntity<Bank> createBank(@RequestBody BankDto bankRequest){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(bankService.createBank(bankRequest));
+    }
+
+
+    @PostMapping("/image")
+    public ResponseEntity<Bank> updateAccountSettingWithImage(@RequestPart("bankId") String bankId,
+                                                                           @RequestPart("image" ) MultipartFile multipartFile) throws IOException {
+        Image image = imageService.uploadAndSaveImage(multipartFile);
+        Bank bank = bankService.getBank(UUID.fromString(bankId));
+        bank.setImage(image);
+        return ResponseEntity.ok(bankService.updateBank(bank));
     }
 
 

@@ -1,12 +1,14 @@
 package com.finStream.bankmanagementservice.service.account.impl;
 
 import com.finStream.bankmanagementservice.dto.account.AccountSettingDto;
+import com.finStream.bankmanagementservice.entity.Image;
 import com.finStream.bankmanagementservice.entity.accountSetting.AccountSetting;
 import com.finStream.bankmanagementservice.entity.accountSetting.*;
 import com.finStream.bankmanagementservice.enums.AccountType;
 
 import com.finStream.bankmanagementservice.repository.AccountBankSettingRepository;
 import com.finStream.bankmanagementservice.service.account.interfaces.IAccountSettingService;
+import com.finStream.bankmanagementservice.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class AccountSettingServiceImpl implements IAccountSettingService {
 
     private final AccountBankSettingRepository accountBankSettingRepository;
     private final AccountSettingDtoHandler accountSettingDtoHandler;
+    private final ImageService imageService;
 
         /**
          * @param accountSettingDto
@@ -52,6 +55,8 @@ public class AccountSettingServiceImpl implements IAccountSettingService {
         }
         accountSettingDto.setBankId(accountSetting.getBankId());
         accountSettingDto.setAccountName(accountSetting.getAccountName());
+        Image image = imageService.getOne(accountSetting.getImageId());
+        accountSettingDto.setImage(image);
 
         // Set properties based on account type
         if (accountSetting instanceof SavingsAccountsSetting savingsSetting) {
