@@ -36,4 +36,5 @@ public class Bank {
     private String address;
     private String email;
     private String phoneNumber;
+    private boolean blocked;
 }

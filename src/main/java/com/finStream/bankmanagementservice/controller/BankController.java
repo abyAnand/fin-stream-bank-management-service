@@ -123,4 +123,9 @@ public class BankController {
         return ResponseEntity.ok(bankService.getAllBankEntity());
     }
 
+    @PostMapping("/block/{bankId}")
+    public ResponseEntity<Void> blockBank(@PathVariable UUID bankId){
+        return ResponseEntity.ok((bankService.blockBank(bankId)));
+    }
+
 }

@@ -56,5 +56,6 @@ public class BaseEntity {
     private LocalDateTime updateDate;
 
     private boolean deleted;
+    private boolean blocked;
 
 }

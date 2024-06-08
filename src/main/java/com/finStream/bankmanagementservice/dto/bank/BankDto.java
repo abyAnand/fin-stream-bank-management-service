@@ -18,4 +18,5 @@ public class BankDto {
     private String email;
     private String address;
     private String phoneNumber;
+    private boolean blocked;
 }

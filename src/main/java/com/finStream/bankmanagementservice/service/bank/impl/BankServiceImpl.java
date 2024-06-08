@@ -164,8 +164,10 @@ public class BankServiceImpl implements IBankService {
                 bankDto.getShortName(),
                 bankDto.getEmail(),
                 bankDto.isVerified(),
+                bankDto.isBlocked(),
                 accountSettings,
                 loanSettings
+
         );
     }
 
@@ -250,7 +252,8 @@ public class BankServiceImpl implements IBankService {
                 bankEntity.getStatus(),
                 bankEntity.getAddress(),
                 bankEntity.getEmail(),
-                bankEntity.getPhoneNumber()
+                bankEntity.getPhoneNumber(),
+                bankEntity.isBlocked()
         );
     }
 
@@ -282,6 +285,18 @@ public class BankServiceImpl implements IBankService {
     @Override
     public List<BankEntity> getAllBankEntity() {
         return bankRepository.findAll();
+    }
+
+    @Override
+    public Void blockBank(UUID bankId) {
+         bankRepository.findById(bankId)
+                .map(bankTobeDeleted -> {
+                    bankTobeDeleted.setBlocked(true);
+                    bankRepository.save(bankTobeDeleted);
+                    return true;
+                })
+                .orElseThrow(() -> new BankNotFoundException("Could not find bank with id: "+ bankId));
+        return null;
     }
 
     private List<? extends AccountSetting> getAccountSettingByType(UUID bankId, AccountType accountType) {

@@ -19,6 +19,7 @@ public class BankInfoDto {
     private String shortName;
     private String email;
     private boolean verified;
+    private boolean blocked;
     private List<AccountSettingDto> accountSettingDtoList;
     private List<LoanSettingDto> loanSettingDtoList;
 }

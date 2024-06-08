@@ -60,4 +60,6 @@ public interface IBankService {
     List<AccountSettingDto> findAllAccountsByBankId(UUID bankId);
 
     List<BankEntity> getAllBankEntity();
+
+    Void blockBank(UUID bankId);
 }
